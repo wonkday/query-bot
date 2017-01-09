@@ -1,0 +1,229 @@
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/bootstrap/3.3.2-2/js/bootstrap.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/style.css">
+    <link rel='stylesheet' href='${pageContext.request.contextPath}/webjars/bootstrap/3.3.2-2/css/bootstrap.min.css'>
+    <script>
+        /*jQuery(document).ready(function($)
+        {
+            $("#header").load("${pageContext.request.contextPath}/static/css/header.jsp");
+            $("#footer").load("${pageContext.request.contextPath}/static/css/footer.html");
+        });*/
+
+        Number.prototype.padLeft = function(base,chr){
+           var  len = (String(base || 10).length - String(this).length)+1;
+           return len > 0? new Array(len).join(chr || '0')+this : this;
+        }
+
+        $(function () {
+            $("#sendBtn").on("click", function () {
+                submitToServer();
+            });
+        });
+
+        $(document).on("submit", "#myform", function(event) {
+            var $form = $(this);
+            //alert("in submit");
+            //event.preventDefault(); // Important! Prevents submitting the form.
+            submitToServer();
+        });
+
+        function submitToServer()
+        {
+            var inputData = $("#instrMsg").val();
+            alert("Val:" + inputData);
+            if(inputData != null && inputData.trim().length > 0)
+            {
+                addMessageToChatSession(inputData,"_h");
+                //$("#instrMsg").val("");
+                //send to server
+                $.ajax({
+                        url: '${pageContext.request.contextPath}/chat',
+                        type: 'POST',
+                        data: {'chatReq':inputData}, // An object with the key 'chatReq' and value 'inputData';
+                        success: function (result) {
+                          //alert("response here...." + result);
+                          console.log(JSON.stringify(result));
+                          addMessageToChatSession(result.chatResp,"_r");
+                          $("#instrMsg").val("");
+                        }
+                    });
+            }
+            else{
+                alert("Input cant be empty!");
+            }
+        }
+
+        function addMessageToChatSession(responseData,type)
+        {
+			//alert("exec - addMessageToChatSession(): " + responseData);
+			var d = new Date();
+			var userTag = "";
+			if(type == '_h')
+			{
+				userTag = '<h2>Me</h2> ';
+			}
+			else
+			{
+				userTag = '<h2>Bot</h2> ';
+			}
+            var messageDiv = '<div class="message'+ type
+							  +'"> <img src="${pageContext.request.contextPath}/static/img/icon.png"/>'
+							  + userTag
+                              + '<p>' + responseData +'</p>'
+                              + '<p class="time"><span class="entypo-clock"></span>'
+                              + [(d.getMonth()+1).padLeft(),d.getDate().padLeft(),d.getFullYear()].join('/')
+                              + ' ' + [ d.getHours().padLeft(),d.getMinutes().padLeft(),d.getSeconds().padLeft()].join(':')
+                              + '</p> </div>';
+			//alert("runtime Div= " + messageDiv);
+            $("#messages").append(messageDiv);
+        }
+
+    </script>
+    <title>Chat Bot</title>
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Roboto:300,300,900);
+        @import url(http://weloveiconfonts.com/api/?family=entypo);
+        [class*="entypo-"]:before {
+          font-family: 'entypo', sans-serif;
+        }
+        * {
+          box-sizing: border-box;
+          margin: 0;
+        }
+        body {
+          background: #BDC1C6;
+          font-family: 'Roboto';
+        }
+        p {
+          font-weight: 300;
+        }
+        .chat {
+          width: 90%;
+          background: #fff;
+          margin: 0 auto;
+        }
+        header {
+          background: #35323C;
+          height: 50px;
+          padding: 5px 10px;
+        }
+        .menu-icon {
+          background: #2F2E33;
+          padding: 5px 5px;
+          float: left;
+          font-size: 3em;
+          line-height: 0.5em;
+          color: #fff;
+          border-radius: 3px;
+        }
+        .menu-icon:hover {
+          background: #39caad;
+          cursor: pointer;
+        }
+        h1 {
+          float: right;
+          color: #fff;
+          margin: 5px;
+          font-weight: 300;
+          font-size: 1.3em;
+        }
+        .new {
+          background: rgb(57, 202, 173);
+          color: #fff;
+          text-align: center;
+          padding: 10px;
+        }
+        .new:hover {
+          cursor: pointer;
+          background: rgba(57, 202, 173, 0.9);
+        }
+        .messages {
+          padding: 0px;
+          height: 70%;
+          overflow:auto;
+        }
+        .message_h {
+          float: left;
+          width: 100%;
+          margin: 10px 0;
+          border-bottom: 1px solid #ccc;
+        }
+        .message p {
+          font-size: 0.8em;
+          width: 90%;
+          margin: 5px 0;
+        }
+		.message_r {
+          float: right;
+          width: 100%;
+          margin: 10px 0;
+          border-bottom: 1px solid #ccc;
+        }
+        img {
+          border-radius: 100%;
+          float: left;
+          margin: 0 10px 15px 0;
+        }
+        p.time {
+          color: rgba(0,0,0,0.5);
+          font-weight: 400;
+        }
+        h2 {
+          font-size: 1em;
+          font-weight: 400;
+		  float: left;
+        }
+        h2:after {
+          content: '';
+          display: inline-block;
+          height: 10px;
+          width: 10px;
+          background: #39caad;
+          border-radius: 100%;
+          margin-left: 5px;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="header"></div>
+        <div id="wrap">
+            <!-- page contents start here -->
+            <form:form id="myform" method="POST" commandName="chat" action="${pageContext.request.contextPath}/chat">
+              <div align="center">
+                <span id="loading">&nbsp;&nbsp;&nbsp;&nbsp;<!-- spinner --></span>
+                <div class="chat">
+                  <header>
+                    <div class="menu-icon"><span class="entypo-menu"></span></div>
+                    <h1>Query BOT</h1>
+                  </header>
+                  <div class="new">
+                    <p><span class="entypo-feather"></span> Messages</p>
+                  </div>
+                  <section class="messages" id="messages">
+
+                  </section>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                		  <input id="instrMsg" type="text" class="form-control">
+                		  <span class="input-group-btn">
+                			<button class="btn btn-default" id="sendBtn" type="button">Send</button>
+                		  </span>
+                		</div>
+                	</div>
+                </div>
+              </div>
+            </form:form>
+            <!-- page contents end here -->
+        </div>
+        <div id="footer"></div>
+    </body>
+</html>
