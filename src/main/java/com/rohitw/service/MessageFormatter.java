@@ -40,11 +40,11 @@ public class MessageFormatter
         if(response == null)
         {
             logger.error("ERROR! - response is null");
-            return null;
+            return "No Data!!";
         }
         RVo[] tempOutput = (RVo[]) response.get(QUERY_RESPONSE);
         String postInstruction = String.valueOf(response.get(QUERY_POST_INSTRUCTION));
-        String debugData = String.valueOf(response.get(QUERY_DB_QUERY));
+        String debugData = String.valueOf(response.get(DEBUG_INSTR_QUERY));
 
         if(tempOutput == null)
         {
@@ -98,6 +98,7 @@ public class MessageFormatter
             strRowHdr.append(HTML_TAG_SPAN_START);
             strRowHdr.append("Instruction:");
             strRowHdr.append(HTML_TAG_SPAN_END);
+            strRowHdr.append(" ");
             strRowHdr.append(postInstruction);
         }
 
@@ -107,6 +108,7 @@ public class MessageFormatter
             strRowHdr.append(HTML_TAG_SPAN_START);
             strRowHdr.append("Debug Info:");
             strRowHdr.append(HTML_TAG_SPAN_END);
+            strRowHdr.append(" ");
             strRowHdr.append(debugData);
         }
 

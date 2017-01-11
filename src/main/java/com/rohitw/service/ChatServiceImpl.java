@@ -32,7 +32,7 @@ public class ChatServiceImpl implements ChatService {
             System.out.println("Received special instruction....");
             String key = str[0];
             String val = str[1];
-            System.out.println("KEY=" + key + "VAL=" + val);
+            System.out.println("KEY=" + key + ", VAL=" + val);
             session.setAttribute(key,val);
             return "command set, please continue..";
         }

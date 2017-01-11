@@ -25,13 +25,14 @@ public class AppConfigConstants
 
     public static final int PROPERTY_ONE_YEAR_IN_SECONDS = 31556926;
 
-    public static final String QUERY_RESPONSE = "response";
-    public static final String QUERY_POST_INSTRUCTION = "post_instr";
 
-    public static final String QUERY_DB_URL = "db_url";
-    public static final String QUERY_DB_UID = "db_uid";
-    public static final String QUERY_DB_USER = "db_user";
-    public static final String QUERY_DB_PASS = "db_pass";
-    public static final String QUERY_DB_SQL_TEXT = "sql_txt";
-    public static final String QUERY_DB_QUERY = "query";
+    public static final String QUERY_DB_URL = "DB_URL";
+    public static final String QUERY_DB_UID = "DB_UID";
+    public static final String QUERY_DB_USER = "DB_USER";
+    public static final String QUERY_DB_PASS = "DB_PASS";
+    public static final String QUERY_DB_SQL_TEXT = "SQL_TXT";
+    public static final String QUERY_POST_INSTRUCTION = "POST_INSTR";
+
+    public static final String QUERY_RESPONSE = "response";
+    public static final String DEBUG_INSTR_QUERY = "query";
 }

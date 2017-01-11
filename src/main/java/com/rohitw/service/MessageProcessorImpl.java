@@ -61,8 +61,8 @@ public class MessageProcessorImpl extends MessageProcessor
                 response = new HashMap<>();
                 response.put(QUERY_RESPONSE,voArr);
                 response.put(QUERY_POST_INSTRUCTION,postInstr);
-                if(instr != null && instr.equals("debug")) {
-                    response.put(QUERY_DB_QUERY,query);
+                if(instr != null && instr.equals(DEBUG_INSTR_QUERY)) {
+                    response.put(DEBUG_INSTR_QUERY,query);
                 }
 
             }

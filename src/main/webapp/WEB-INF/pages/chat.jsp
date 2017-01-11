@@ -31,7 +31,7 @@
 
         $(document).on("submit", "#myform", function(event) {
             var $form = $(this);
-            //alert("in submit");
+            alert("in submit");
             //event.preventDefault(); // Important! Prevents submitting the form.
             submitToServer();
         });
@@ -39,7 +39,7 @@
         function submitToServer()
         {
             var inputData = $("#instrMsg").val();
-            alert("Val:" + inputData);
+            //alert("Val:" + inputData);
             if(inputData != null && inputData.trim().length > 0)
             {
                 addMessageToChatSession(inputData,"_h");
@@ -51,7 +51,7 @@
                         data: {'chatReq':inputData}, // An object with the key 'chatReq' and value 'inputData';
                         success: function (result) {
                           //alert("response here...." + result);
-                          console.log(JSON.stringify(result));
+                          //console.log(JSON.stringify(result));
                           addMessageToChatSession(result.chatResp,"_r");
                           $("#instrMsg").val("");
                         }
@@ -67,16 +67,22 @@
 			//alert("exec - addMessageToChatSession(): " + responseData);
 			var d = new Date();
 			var userTag = "";
+			var alignTxt = "right";
+			var marginTxt = "margin: 0 10px 15px 0;"
 			if(type == '_h')
 			{
 				userTag = '<h2>Me</h2> ';
+				alignTxt = "right";
+				marginTxt = "margin: 0 10px 15px 10px;"
 			}
 			else
 			{
-				userTag = '<h2>Bot</h2> ';
+				userTag = '<h3>Bot</h3> ';
+				alignTxt = "left";
+				marginTxt = "margin: 0 0 10px 10px;"
 			}
             var messageDiv = '<div class="message'+ type
-							  +'"> <img src="${pageContext.request.contextPath}/static/img/icon.png"/>'
+							  +'"> <img style="border-radius: 100%;' + marginTxt + ' float:' + alignTxt +';" src="${pageContext.request.contextPath}/static/img/icon.png"/>'
 							  + userTag
                               + '<p>' + responseData +'</p>'
                               + '<p class="time"><span class="entypo-clock"></span>'
@@ -152,7 +158,8 @@
           overflow:auto;
         }
         .message_h {
-          float: left;
+		  text-align: right;
+          float: right;
           width: 100%;
           margin: 10px 0;
           border-bottom: 1px solid #ccc;
@@ -163,7 +170,8 @@
           margin: 5px 0;
         }
 		.message_r {
-          float: right;
+		  text-align: left;
+          float: left;
           width: 100%;
           margin: 10px 0;
           border-bottom: 1px solid #ccc;
@@ -171,7 +179,7 @@
         img {
           border-radius: 100%;
           float: left;
-          margin: 0 10px 15px 0;
+          margin: 0 10px 15px 10px;
         }
         p.time {
           color: rgba(0,0,0,0.5);
@@ -180,7 +188,8 @@
         h2 {
           font-size: 1em;
           font-weight: 400;
-		  float: left;
+		  float: right;
+		  margin: 10px 0 10px 30px;
         }
         h2:after {
           content: '';
@@ -190,6 +199,21 @@
           background: #39caad;
           border-radius: 100%;
           margin-left: 5px;
+        }
+		h3 {
+          font-size: 1em;
+          font-weight: 400;
+		  float: left;
+		  margin: 10px 30px 0 10px;
+        }
+		h3:before {
+          content: '';
+          display: inline-block;
+          height: 10px;
+          width: 10px;
+          background: #39caad;
+          border-radius: 100%;
+          margin-left: 10px;
         }
     </style>
     </head>

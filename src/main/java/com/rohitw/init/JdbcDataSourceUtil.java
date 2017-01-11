@@ -131,7 +131,7 @@ public class JdbcDataSourceUtil
                 {
                     colName = rowSet.getMetaData().getColumnName(i);
                     val = rowSet.getString(i);
-                    row.setFieldData(colName.toLowerCase(), val);
+                    row.setFieldData(colName.toUpperCase(), val);
                 }
                 resultList.add(row);
                 count++;
