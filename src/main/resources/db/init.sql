@@ -7,6 +7,7 @@ CREATE TABLE BOT_QUERY_CONFIG (
   DB_URL VARCHAR2(4000),
   ALERT VARCHAR2(50),
   SQL_TXT VARCHAR2(4000),
+  QUERY_PARAMS VARCHAR2(2000),
   KEYWORD VARCHAR2(40),
   POST_INSTR VARCHAR2(2000),
   VERSION NUMBER,
@@ -16,8 +17,8 @@ CREATE TABLE BOT_QUERY_CONFIG (
   PRIMARY KEY (ALERT)
 );
 
-INSERT INTO BOT_QUERY_CONFIG(ACCOUNT, APPLICATION, DB_UID, DB_USER, DB_PASS, DB_URL, ALERT, SQL_TXT, KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
-VALUES ('test','test','local','rohitw','rohitw','jdbc:oracle:thin:@localhost:1521:rohitw','test alert','select * from TEST_DATA','test data','send email',1,'Y',sysdate,sysdate);
+INSERT INTO BOT_QUERY_CONFIG(ACCOUNT, APPLICATION, DB_UID, DB_USER, DB_PASS, DB_URL, ALERT, SQL_TXT, QUERY_PARAMS,KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
+VALUES ('test','test','local','rohitw','rohitw','jdbc:oracle:thin:@localhost:1521:rohitw','test alert','select * from TEST_DATA where key = :input','{"input":"FOO"}','test data','send email',1,'Y',sysdate,sysdate);
 
 CREATE TABLE TEST_DATA (
   KEY VARCHAR2(40),

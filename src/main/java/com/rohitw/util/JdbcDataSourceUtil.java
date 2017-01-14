@@ -1,4 +1,4 @@
-package com.rohitw.init;
+package com.rohitw.util;
 
 import com.rohitw.model.RVo;
 import org.apache.log4j.Logger;

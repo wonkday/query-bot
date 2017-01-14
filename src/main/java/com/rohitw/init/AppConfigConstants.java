@@ -32,6 +32,7 @@ public class AppConfigConstants
     public static final String QUERY_DB_PASS = "DB_PASS";
     public static final String QUERY_DB_SQL_TEXT = "SQL_TXT";
     public static final String QUERY_POST_INSTRUCTION = "POST_INSTR";
+    public static final String QUERY_INPUT_PARAMS = "QUERY_PARAMS";
 
     public static final String QUERY_RESPONSE = "response";
     public static final String DEBUG_INSTR_QUERY = "query";

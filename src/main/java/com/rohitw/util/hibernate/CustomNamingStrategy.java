@@ -1,4 +1,4 @@
-package com.rohitw.hibernate.util;
+package com.rohitw.util.hibernate;
 
 import org.hibernate.cfg.ImprovedNamingStrategy;
 

@@ -33,6 +33,9 @@ public class MessageFormatter
 
     private static final String HTML_TAG_BR = "<br>";
 
+    private static final String HTML_TAG_CUSTOM_TAB_START = "<tab>";
+    private static final String HTML_TAG_CUSTOM_TAB_END = "</tab>";
+
     private static Logger logger = Logger.getLogger(MessageFormatter.class);
 
     public static String formatToHtml(Map<String,Object>  response)
@@ -95,21 +98,25 @@ public class MessageFormatter
         if(postInstruction!=null && !postInstruction.equals("null"))
         {
             strRowHdr.append(HTML_TAG_BR);
+            strRowHdr.append(HTML_TAG_CUSTOM_TAB_START);
             strRowHdr.append(HTML_TAG_SPAN_START);
             strRowHdr.append("Instruction:");
             strRowHdr.append(HTML_TAG_SPAN_END);
             strRowHdr.append(" ");
             strRowHdr.append(postInstruction);
+            strRowHdr.append(HTML_TAG_CUSTOM_TAB_END);
         }
 
         if(debugData!=null && !debugData.equals("null"))
         {
             strRowHdr.append(HTML_TAG_BR);
+            strRowHdr.append(HTML_TAG_CUSTOM_TAB_START);
             strRowHdr.append(HTML_TAG_SPAN_START);
             strRowHdr.append("Debug Info:");
             strRowHdr.append(HTML_TAG_SPAN_END);
             strRowHdr.append(" ");
             strRowHdr.append(debugData);
+            strRowHdr.append(HTML_TAG_CUSTOM_TAB_END);
         }
 
         return strRowHdr.toString();

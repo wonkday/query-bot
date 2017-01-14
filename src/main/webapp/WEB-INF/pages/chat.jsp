@@ -30,11 +30,31 @@
         });
 
         $(document).on("submit", "#myform", function(event) {
-            var $form = $(this);
-            alert("in submit");
-            //event.preventDefault(); // Important! Prevents submitting the form.
-            submitToServer();
+            //var $form = $(this);
+            event.preventDefault(); // Important! Prevents submitting the form.
+
+			///-----------------
+			var form = $(this).parent();
+			// Get form fields
+			var data = $(form).serializeArray(), obj = {}, j = 0;
+			for (var i = 0; i < data.length; i++)
+			{
+			  if( data[i].name in obj )
+			  {
+				var key = data[i].name + '_' + j;
+				obj[key] = data[i].value;
+				j++;
+			  }
+			  else
+			  {
+				obj[data[i].name] = data[i].value;
+			  }
+			};
+			///------------------
+
+			submitToServer();
         });
+
 
         function submitToServer()
         {
@@ -43,7 +63,6 @@
             if(inputData != null && inputData.trim().length > 0)
             {
                 addMessageToChatSession(inputData,"_h");
-                //$("#instrMsg").val("");
                 //send to server
                 $.ajax({
                         url: '${pageContext.request.contextPath}/chat',
@@ -85,11 +104,10 @@
 							  +'"> <img style="border-radius: 100%;' + marginTxt + ' float:' + alignTxt +';" src="${pageContext.request.contextPath}/static/img/icon.png"/>'
 							  + userTag
                               + '<p>' + responseData +'</p>'
-                              + '<p class="time"><span class="entypo-clock"></span>'
+                              + '<p class="time' + type + '"><span class="entypo-clock"></span>'
                               + [(d.getMonth()+1).padLeft(),d.getDate().padLeft(),d.getFullYear()].join('/')
                               + ' ' + [ d.getHours().padLeft(),d.getMinutes().padLeft(),d.getSeconds().padLeft()].join(':')
                               + '</p> </div>';
-			//alert("runtime Div= " + messageDiv);
             $("#messages").append(messageDiv);
         }
 
@@ -181,9 +199,14 @@
           float: left;
           margin: 0 10px 15px 10px;
         }
-        p.time {
+        p.time_h {
           color: rgba(0,0,0,0.5);
           font-weight: 400;
+        }
+		p.time_r {
+          color: rgba(0,0,0,0.5);
+          font-weight: 400;
+		  padding-left: 4em;
         }
         h2 {
           font-size: 1em;
@@ -213,8 +236,9 @@
           width: 10px;
           background: #39caad;
           border-radius: 100%;
-          margin-left: 10px;
+          margin-right: 10px;
         }
+        tab { padding-left: 4em; }
     </style>
     </head>
     <body>
@@ -222,6 +246,7 @@
         <div id="wrap">
             <!-- page contents start here -->
             <form:form id="myform" method="POST" commandName="chat" action="${pageContext.request.contextPath}/chat">
+			<!--form id="myform" method="POST" commandName="chat" action="${pageContext.request.contextPath}/chat"-->
               <div align="center">
                 <span id="loading">&nbsp;&nbsp;&nbsp;&nbsp;<!-- spinner --></span>
                 <div class="chat">
@@ -245,7 +270,8 @@
                 	</div>
                 </div>
               </div>
-            </form:form>
+            <!--/form -->
+			</form:form>
             <!-- page contents end here -->
         </div>
         <div id="footer"></div>

@@ -6,6 +6,8 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import com.rohitw.util.JdbcDataSourceUtil;
+import com.rohitw.util.UserPropertySingleton;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -13,7 +15,6 @@ import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -25,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import static com.rohitw.init.AppConfigConstants.*;
-import static com.rohitw.init.UserPropertySingleton.*;
+
 
 
 @Configuration
