@@ -18,7 +18,7 @@ import static com.rohitw.init.AppConfigConstants.*;
 public class MessageProcessorImpl extends MessageProcessor
 {
 
-    private static final String CACHE_ID_CONFIG_DS = "configDB";
+    private static final String CACHE_ID_CONFIG_DS = "_configDB";
     private static final String CACHE_ID_APP_DS_PREFIX = "_AppDB_";
 
     private Logger logger = Logger.getLogger(MessageProcessorImpl.class);

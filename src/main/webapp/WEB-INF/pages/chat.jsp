@@ -85,6 +85,7 @@
         {
 			//alert("exec - addMessageToChatSession(): " + responseData);
 			var d = new Date();
+			var millis = Date.now();
 			var userTag = "";
 			var alignTxt = "right";
 			var marginTxt = "margin: 0 10px 15px 0;"
@@ -100,7 +101,7 @@
 				alignTxt = "left";
 				marginTxt = "margin: 0 0 10px 10px;"
 			}
-            var messageDiv = '<div class="message'+ type
+            var messageDiv = '<div class="message'+ type +'" id="message' + millis
 							  +'"> <img style="border-radius: 100%;' + marginTxt + ' float:' + alignTxt +';" src="${pageContext.request.contextPath}/static/img/icon.png"/>'
 							  + userTag
                               + '<p>' + responseData +'</p>'
@@ -109,7 +110,13 @@
                               + ' ' + [ d.getHours().padLeft(),d.getMinutes().padLeft(),d.getSeconds().padLeft()].join(':')
                               + '</p> </div>';
             $("#messages").append(messageDiv);
+
+			//auto-scroll to bottom after data is added
+			var elem = document.getElementById('message'+millis);
+			var footer = document.getElementById('panel-footer');
+			document.scrollingElement.scrollTop = document.scrollingElement.scrollTop + elem.scrollHeight + footer.scrollHeight;
         }
+
 
     </script>
     <title>Chat Bot</title>
@@ -260,7 +267,7 @@
                   <section class="messages" id="messages">
 
                   </section>
-                    <div class="panel-footer">
+                    <div class="panel-footer" id="panel-footer">
                         <div class="input-group">
                 		  <input id="instrMsg" type="text" class="form-control">
                 		  <span class="input-group-btn">
