@@ -83,7 +83,7 @@ public class JdbcDataSourceUtil
             }
         }catch(Exception ex)
         {
-            logger.error("getDataSource(url)", ex);
+            logger.error("getDataSource()", ex);
         }
         return dataSource;
     }

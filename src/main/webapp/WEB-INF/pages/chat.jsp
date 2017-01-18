@@ -121,8 +121,8 @@
     </script>
     <title>Chat Bot</title>
     <style>
-        @import url(http://fonts.googleapis.com/css?family=Roboto:300,300,900);
-        @import url(http://weloveiconfonts.com/api/?family=entypo);
+        @import url("${pageContext.request.contextPath}/static/css/Roboto.css");
+        @import url("${pageContext.request.contextPath}/static/css/entypo.css");
         [class*="entypo-"]:before {
           font-family: 'entypo', sans-serif;
         }

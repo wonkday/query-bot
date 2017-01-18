@@ -9,7 +9,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 */
-import java.util.HashMap;
+
 import java.util.Iterator;
 import java.util.Map;
 import static com.rohitw.init.AppConfigConstants.*;
@@ -64,7 +64,7 @@ public class MessageFormatter
             if(isHdrNotAdded) {
                 strRowData.append(HTML_TAG_TR_START);
             }
-            HashMap fields = vo.getRowData();
+            Map fields = vo.getRowData();
             Iterator iterator = fields.entrySet().iterator();
             while (iterator.hasNext())
             {

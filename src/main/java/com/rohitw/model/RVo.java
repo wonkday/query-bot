@@ -1,6 +1,7 @@
 package com.rohitw.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Record VO
@@ -9,7 +10,7 @@ import java.util.HashMap;
 public class RVo
 {
     protected String dbObjectName;
-    protected HashMap<String,String> rowData = new HashMap<>();
+    protected Map<String,String> rowData = new LinkedHashMap<>();
 
     public String getDbObjectName() {
         return dbObjectName;
@@ -29,12 +30,12 @@ public class RVo
         return rowData.get(fieldName);
     }
 
-    public void setRowData(HashMap<String, String> inputRow)
+    public void setRowData(Map<String, String> inputRow)
     {
         rowData.putAll(inputRow);
     }
 
-    public HashMap<String,String> getRowData()
+    public Map<String,String> getRowData()
     {
         return rowData;
     }
