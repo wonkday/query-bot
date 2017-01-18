@@ -55,21 +55,18 @@ public class LinkController
     {
         if(httpSession != null)
         {
-            System.out.println("SessionID: " + httpSession.getId());
+            logger.info("SessionID: " + httpSession.getId());
         }
 
-        System.out.println("request: " + chatReq);
-        logger.trace("request: " + chatReq);
+        logger.info("request: " + chatReq);
 
-        //String resultStr = "test data - " + chatReq;
         ChatService chatService = new ChatServiceImpl();
         String resultStr = chatService.processRequest(httpSession,chatReq);
 
         ChatData chatData = new ChatData();
         chatData.setChatResp(resultStr);
 
-        System.out.println("response: " + chatData.getChatResp());
-        logger.trace("response: " + resultStr);
+        logger.info("response: " + resultStr);
         return chatData;
     }
 }

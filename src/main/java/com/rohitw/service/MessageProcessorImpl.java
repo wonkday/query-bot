@@ -89,8 +89,6 @@ public class MessageProcessorImpl extends MessageProcessor
                     logger.info("Using previously created DS for "+ dbUid);
                 }
 
-
-
                 RVo[] voArr = JdbcDataSourceUtil.executeSelectQuery(appDbDS,query,JsonUtil.parseJsonStringToSqlParam(queryParams));
 
                 response = new HashMap<>();
@@ -99,7 +97,6 @@ public class MessageProcessorImpl extends MessageProcessor
                 if(instr != null && instr.equals(DEBUG_INSTR_QUERY)) {
                     response.put(DEBUG_INSTR_QUERY,query);
                 }
-
             }
             else
             {

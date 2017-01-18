@@ -29,7 +29,7 @@ public class ChatServiceImpl implements ChatService {
         if(message.startsWith("$debug"))
         {
             String[] str = message.split("=");
-            System.out.println("Received special instruction....");
+            logger.info("Received special instruction....");
             String key = str[0];
             String val = str[1];
             System.out.println("KEY=" + key + ", VAL=" + val);

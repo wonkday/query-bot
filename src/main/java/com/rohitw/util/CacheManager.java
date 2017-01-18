@@ -18,7 +18,7 @@ public enum CacheManager
     private ConcurrentMap<Object,Object> cacheMap;
 
     private static final int NTHREDS = 1;
-    private static final int intCacheCleanIntervalMiils = 1000 * 60 * 60;
+    private static final int intCacheCleanIntervalMillis = 1000 * 60 * 60;
 
     CacheManager(){
         cacheMap = new ConcurrentHashMap(10,(float) 0.25);
@@ -32,10 +32,11 @@ public enum CacheManager
                             @Override
                             public void run()
                             {
-                                cacheCleaner.call();
+                               String msg = cacheCleaner.call();
+                                logger.info("Execution of " + msg);
                             }
                         },
-                        0, (intCacheCleanIntervalMiils), TimeUnit.MILLISECONDS
+                        0, (intCacheCleanIntervalMillis), TimeUnit.MILLISECONDS
                 );
     }
 

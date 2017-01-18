@@ -114,6 +114,7 @@
 			//auto-scroll to bottom after data is added
 			var elem = document.getElementById('message'+millis);
 			var footer = document.getElementById('panel-footer');
+			//elem.scrollTop = elem.scrollTop + elem.scrollHeight + footer.scrollHeight;
 			document.scrollingElement.scrollTop = document.scrollingElement.scrollTop + elem.scrollHeight + footer.scrollHeight;
         }
 
