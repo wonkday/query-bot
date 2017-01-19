@@ -1,10 +1,17 @@
-CREATE TABLE BOT_QUERY_CONFIG (
+CREATE TABLE BOT_DB_CONFIG (
   ACCOUNT VARCHAR2(40),
   APPLICATION VARCHAR2(40),
   DB_UID VARCHAR2(40),
   DB_USER VARCHAR2(40),
   DB_PASS VARCHAR2(40),
   DB_URL VARCHAR2(4000),
+  CREATION_TIME TIMESTAMP,
+  UPDATE_TIME TIMESTAMP,
+  PRIMARY KEY (DB_UID)
+);
+
+CREATE TABLE BOT_QUERY_CONFIG (
+  DB_UID VARCHAR2(40),
   ALERT VARCHAR2(50),
   SQL_TXT VARCHAR2(4000),
   QUERY_PARAMS VARCHAR2(2000),
@@ -17,8 +24,14 @@ CREATE TABLE BOT_QUERY_CONFIG (
   PRIMARY KEY (ALERT)
 );
 
-INSERT INTO BOT_QUERY_CONFIG(ACCOUNT, APPLICATION, DB_UID, DB_USER, DB_PASS, DB_URL, ALERT, SQL_TXT, QUERY_PARAMS,KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
-VALUES ('test','test','local','rohitw','rohitw','jdbc:oracle:thin:@localhost:1521:rohitw','test alert','select * from TEST_DATA where key = :input','{"input":"FOO"}','test data','send email',1,'Y',sysdate,sysdate);
+alter table BOT_QUERY_CONFIG add constraint fk_db_uid FOREIGN KEY (db_uid) references BOT_DB_CONFIG (db_uid);
+
+grant all on BOT_DB_CONFIG to public;
+grant all on BOT_QUERY_CONFIG to public;
+
+create public synonym BOT_DB_CONFIG for BOT_DB_CONFIG;
+create public synonym BOT_QUERY_CONFIG for BOT_QUERY_CONFIG;
+
 
 CREATE TABLE TEST_DATA (
   KEY VARCHAR2(40),
@@ -26,11 +39,24 @@ CREATE TABLE TEST_DATA (
   PRIMARY KEY (KEY)
 );
 
-grant all on BOT_QUERY_CONFIG to public;
 grant all on TEST_DATA to public;
-create public synonym BOT_QUERY_CONFIG for BOT_QUERY_CONFIG;
 create public synonym TEST_DATA for TEST_DATA;
 
 INSERT INTO TEST_DATA (KEY, VAL) VALUES ('FOO', 'BAR');
 INSERT INTO TEST_DATA (KEY, VAL) VALUES  ('test', 'testing123');
 
+
+INSERT INTO BOT_DB_CONFIG(ACCOUNT, APPLICATION, DB_UID, DB_USER, DB_PASS, DB_URL, CREATION_TIME, UPDATE_TIME)
+VALUES ('test','test','local','rohitw','rohitw','jdbc:oracle:thin:@localhost:1521:rohitw',sysdate,sysdate);
+
+INSERT INTO BOT_QUERY_CONFIG(DB_UID, ALERT, SQL_TXT, QUERY_PARAMS,KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
+VALUES ('local','test alert','select * from TEST_DATA where key = :input','{"input":"FOO"}','test data','send email',1,'Y',sysdate,sysdate);
+
+INSERT INTO BOT_QUERY_CONFIG(DB_UID, ALERT, SQL_TXT, QUERY_PARAMS,KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
+VALUES ('local','test1','select * from TEST_DATA','','test data','send email',1,'Y',sysdate,sysdate);
+
+INSERT INTO BOT_DB_CONFIG(ACCOUNT, APPLICATION, DB_UID, DB_USER, DB_PASS, DB_URL,CREATION_TIME,UPDATE_TIME)
+VALUES ('Company','Appln','appln_id','rohitw','rohitw','jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=rohitw)))',systimestamp,systimestamp)
+
+INSERT INTO BOT_QUERY_CONFIG(DB_UID, ALERT, SQL_TXT, QUERY_PARAMS,KEYWORD,POST_INSTR,VERSION,IS_ACTIVE,CREATION_TIME, UPDATE_TIME)
+VALUES ('appln_id','rulemanager','SELECT SUM(CASE WHEN ESCALATE_TIME <> to_date(''01-01-2999 12:00:00'',''mm-dd-yyyy hh24:mi:ss'')  THEN 1 ELSE 0 END ) PENDING,SUM(CASE WHEN ESCALATE_TIME = to_date(''01-01-2999 12:00:00'',''mm-dd-yyyy hh24:mi:ss'')  THEN 1 ELSE 0 END ) FAILURE FROM TABLE_TIME_BOMB WHERE ESCALATE_TIME < trunc(SYSDATE+1)  AND  CREATION_TIME> TRUNC(SYSDATE)','','ruleman backlog','Contact team',1,'Y',sysdate,sysdate);

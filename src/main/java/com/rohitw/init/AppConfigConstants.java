@@ -12,7 +12,7 @@ public class AppConfigConstants
     public static final String PROPERTY_NAME_DATABASE_URL = "db.url";
     public static final String PROPERTY_NAME_DATABASE_USERNAME = "db.username";
 
-    public static final String PROPERTY_NAME_DATABASE_MAX_ROWS = "db.max.rows";
+    public static final String PROPERTY_NAME_DATABASE_MAX_ROWS = "db.query.max.rows";
     public static final String PROPERTY_NAME_DATABASE_QUERY_TIMEOUT = "db.query.timeout.sec";
 
     public static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";

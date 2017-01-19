@@ -11,6 +11,9 @@
     <appender name="chatAppLogger" class="org.apache.log4j.RollingFileAppender">
         <param name="append" value="false"/>
         <param name="file" value="queryBot.log"/>
+        <param name="datePattern" value="'-'yyyy-MM-dd'.log'" />
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="5" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
         </layout>
@@ -20,6 +23,11 @@
         <level value="ALL" />
         <appender-ref ref="chatAppLogger"/>
     </logger>
+
+    <!-- set additivity to true if sql logging is needed -->
+    <category name="org.springframework.jdbc.core.JdbcTemplate" additivity="true">
+        <priority value="debug" />
+    </category>
 
     <root>
         <level value="INFO"/>

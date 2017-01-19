@@ -22,9 +22,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public String processRequest(HttpSession session, String message) {
-
         logger.info("processing request message - " + message);
-        String debugInstr = null;
 
         if(message.startsWith("$debug"))
         {
@@ -32,11 +30,11 @@ public class ChatServiceImpl implements ChatService {
             logger.info("Received special instruction....");
             String key = str[0];
             String val = str[1];
-            System.out.println("KEY=" + key + ", VAL=" + val);
+            logger.info("KEY=" + key + ", VAL=" + val);
             session.setAttribute(key,val);
             return "command set, please continue..";
         }
-        debugInstr = String.valueOf(session.getAttribute("$debug_instr"));
+        String debugInstr = String.valueOf(session.getAttribute("$debug"));
 
         MessageProcessor processor = new MessageProcessorImpl();
         String output = processor.processMessage(message,debugInstr);

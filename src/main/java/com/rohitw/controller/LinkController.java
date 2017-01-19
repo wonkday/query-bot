@@ -43,7 +43,7 @@ public class LinkController
     {
         if(httpSession != null)
         {
-            System.out.println("SessionID: " + httpSession.getId());
+            logger.info("SessionID: " + httpSession.getId());
         }
         ModelAndView modelAndView = new ModelAndView("chat");
         modelAndView.addObject("chat", new ChatData());

@@ -63,7 +63,7 @@ public class MessageProcessorImpl extends MessageProcessor
                 String queryParams = configVoArr[0].getFieldData(QUERY_INPUT_PARAMS);
                 String postInstr = configVoArr[0].getFieldData(QUERY_POST_INSTRUCTION);
 
-                StringBuilder stringBuilder = new StringBuilder("\nRunning query <");
+                StringBuilder stringBuilder = new StringBuilder("Running query <");
                 stringBuilder.append(query);
                 stringBuilder.append("> on ");
                 stringBuilder.append("DB_UID <");
@@ -144,6 +144,4 @@ public class MessageProcessorImpl extends MessageProcessor
         response.put(QUERY_RESPONSE,voArr);
         return response;
     }
-
-
 }
