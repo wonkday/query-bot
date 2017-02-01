@@ -116,10 +116,15 @@ public class WebAppConfig extends WebMvcConfigurerAdapter
         instance.setUserProperty(PROPERTY_NAME_DATABASE_URL,env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
         instance.setUserProperty(PROPERTY_NAME_DATABASE_MAX_ROWS,env.getRequiredProperty(PROPERTY_NAME_DATABASE_MAX_ROWS));
         instance.setUserProperty(PROPERTY_NAME_DATABASE_QUERY_TIMEOUT,env.getRequiredProperty(PROPERTY_NAME_DATABASE_QUERY_TIMEOUT));
+        instance.setUserProperty(PROPERTY_NAME_DATABASE_MAX_QUERIES_ALLOWED,env.getProperty(PROPERTY_NAME_DATABASE_MAX_QUERIES_ALLOWED));
+        instance.setUserProperty(PROPERTY_NAME_DATABASE_MAX_QUERIES_INTERVAL_MINUTES,env.getProperty(PROPERTY_NAME_DATABASE_MAX_QUERIES_INTERVAL_MINUTES));
 
         instance.setUserProperty(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
         instance.setUserProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
         instance.setUserProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY,env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
+
+        instance.setUserProperty(PROPERTY_NAME_ALERT_QUERY,env.getProperty(PROPERTY_NAME_ALERT_QUERY));
+
         logger.trace("EXIT: finished loading user properties...");
     }
 

@@ -11,10 +11,10 @@ import java.util.Map;
 public abstract class MessageProcessor
 {
 
-    public String processMessage(String inputMsg, String instr)
+    public String processMessage(String inputMsg, String acct, String instr)
     {
         preProcess(inputMsg);
-        Map<String,Object>  tempOutput = processMessageImpl(inputMsg, instr);
+        Map<String,Object>  tempOutput = processMessageImpl(inputMsg, acct, instr);
         postProcess(tempOutput);
 
         String formattedOutput = MessageFormatter.formatToHtml(tempOutput);
@@ -26,7 +26,7 @@ public abstract class MessageProcessor
 
     }
 
-    public abstract Map<String,Object> processMessageImpl(String inputMsg, String instr);
+    public abstract Map<String,Object> processMessageImpl(String inputMsg, String acct, String instr);
 
     public void postProcess(Map<String,Object> output)
     {

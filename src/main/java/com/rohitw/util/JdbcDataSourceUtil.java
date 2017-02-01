@@ -22,9 +22,17 @@ import static com.rohitw.init.AppConfigConstants.*;
 public class JdbcDataSourceUtil
 {
     private static Logger logger = Logger.getLogger(JdbcDataSourceUtil.class);
-    public static final String CONFIG_QUERY = "SELECT a.account,a.application,a.db_uid,a.db_user,a.db_pass,a.db_url,b.alert,b.sql_txt,b.query_params,b.keyword,b.post_instr "
+    public static final String CONFIG_QUERY_DEFAULT = "SELECT a.account,a.application,a.db_uid,a.db_user,a.db_pass,a.db_url,b.alert,b.sql_txt,b.query_params,b.keyword,b.post_instr "
             + "FROM bot_db_config a INNER JOIN bot_query_config b on a.db_uid = b.db_uid "
             + "WHERE is_active='Y' AND alert= :alertID";
+
+    public static final String CONFIG_QUERY_ACCT = "SELECT a.account,a.application,a.db_uid,a.db_user,a.db_pass,a.db_url,b.alert,b.sql_txt,b.query_params,b.keyword,b.post_instr "
+            + "FROM bot_db_config a INNER JOIN bot_query_config b on a.db_uid = b.db_uid "
+            + "WHERE is_active='Y' AND account= :acct AND alert= :alertID";
+
+    public static final String CONFIG_QUERY_ACCT_AND_KEYWORD = "SELECT a.account,a.application,a.db_uid,a.db_user,a.db_pass,a.db_url,b.alert,b.sql_txt,b.query_params,b.keyword,b.post_instr "
+            + "FROM bot_db_config a INNER JOIN bot_query_config b on a.db_uid = b.db_uid "
+            + "WHERE is_active='Y' AND account= :acct AND ( alert= :alertID or keyword= :alertID )";
 
     /**
      * Database types

@@ -1,5 +1,6 @@
 package com.rohitw.controller;
 
+import com.rohitw.init.AppConfigConstants;
 import com.rohitw.model.ChatData;
 import com.rohitw.service.ChatService;
 import com.rohitw.service.ChatServiceImpl;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -44,6 +46,23 @@ public class LinkController
         if(httpSession != null)
         {
             logger.info("SessionID: " + httpSession.getId());
+            if(httpSession.isNew())
+            {
+                httpSession.removeAttribute(AppConfigConstants.INSTRUCTION_ACCOUNT);
+            }
+        }
+        ModelAndView modelAndView = new ModelAndView("chat");
+        modelAndView.addObject("chat", new ChatData());
+        return new ModelAndView("chat");
+    }
+
+    @RequestMapping(value="/chat/{acct}", method= RequestMethod.GET)
+    public ModelAndView chatPageForAccount(HttpSession httpSession,@PathVariable String acct)
+    {
+        if(httpSession != null)
+        {
+            logger.info("SessionID: " + httpSession.getId() + " with Acct: " + acct);
+            httpSession.setAttribute(AppConfigConstants.INSTRUCTION_ACCOUNT,acct);
         }
         ModelAndView modelAndView = new ModelAndView("chat");
         modelAndView.addObject("chat", new ChatData());

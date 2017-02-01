@@ -28,7 +28,9 @@ public class MessageFormatter
     private static final String HTML_TAG_TD_START = "<td style=\"text-align: center; min-width:100px\">";
     private static final String HTML_TAG_TD_END = "</td>";
 
-    private static final String HTML_TAG_SPAN_START = "<span style=\"font-weight:bold\">";
+    private static final String HTML_TAG_SPAN_START_BOLD = "<span style=\"font-weight:bold\">";
+    private static final String HTML_TAG_SPAN_START_RED = "<span style=\"color:red\">";
+    private static final String HTML_TAG_SPAN_START_WARN = "<span style=\"color:orange\">";
     private static final String HTML_TAG_SPAN_END = "</span>";
 
     private static final String HTML_TAG_BR = "<br>";
@@ -48,6 +50,7 @@ public class MessageFormatter
         RVo[] tempOutput = (RVo[]) response.get(QUERY_RESPONSE);
         String postInstruction = String.valueOf(response.get(QUERY_POST_INSTRUCTION));
         String debugData = String.valueOf(response.get(DEBUG_INSTR_QUERY));
+        String responseType = String.valueOf(response.get(RESPONSE_TYPE));
 
         if(tempOutput == null)
         {
@@ -71,7 +74,7 @@ public class MessageFormatter
                 Map.Entry field = (Map.Entry) iterator.next();
                 if(isHdrNotAdded) {
                     strRowHdr.append(HTML_TAG_TD_START);
-                    strRowHdr.append(HTML_TAG_SPAN_START);
+                    strRowHdr.append(HTML_TAG_SPAN_START_BOLD);
                     strRowHdr.append(field.getKey());
                     strRowHdr.append(HTML_TAG_SPAN_END);
                     strRowHdr.append(HTML_TAG_TD_END);
@@ -99,11 +102,23 @@ public class MessageFormatter
         {
             strRowHdr.append(HTML_TAG_BR);
             strRowHdr.append(HTML_TAG_CUSTOM_TAB_START);
-            strRowHdr.append(HTML_TAG_SPAN_START);
+            strRowHdr.append(HTML_TAG_SPAN_START_BOLD);
             strRowHdr.append("Instruction:");
             strRowHdr.append(HTML_TAG_SPAN_END);
             strRowHdr.append(" ");
-            strRowHdr.append(postInstruction);
+            if(RESPONSE_TYPE_NORMAL.equals(responseType)) {
+                strRowHdr.append(postInstruction);
+            }
+            else if(RESPONSE_TYPE_WARNING.equals(responseType)) {
+                strRowHdr.append(HTML_TAG_SPAN_START_WARN);
+                strRowHdr.append(postInstruction);
+                strRowHdr.append(HTML_TAG_SPAN_END);
+            }
+            else if(RESPONSE_TYPE_ERROR.equals(responseType)) {
+                strRowHdr.append(HTML_TAG_SPAN_START_RED);
+                strRowHdr.append(postInstruction);
+                strRowHdr.append(HTML_TAG_SPAN_END);
+            }
             strRowHdr.append(HTML_TAG_CUSTOM_TAB_END);
         }
 
@@ -111,7 +126,7 @@ public class MessageFormatter
         {
             strRowHdr.append(HTML_TAG_BR);
             strRowHdr.append(HTML_TAG_CUSTOM_TAB_START);
-            strRowHdr.append(HTML_TAG_SPAN_START);
+            strRowHdr.append(HTML_TAG_SPAN_START_BOLD);
             strRowHdr.append("Debug Info:");
             strRowHdr.append(HTML_TAG_SPAN_END);
             strRowHdr.append(" ");

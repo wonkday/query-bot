@@ -1,5 +1,6 @@
 package com.rohitw.service;
 
+import com.rohitw.init.AppConfigConstants;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +16,7 @@ public class ChatServiceImpl implements ChatService {
     public String processRequest(String message) {
         logger.info("processing request message - " + message);
         MessageProcessor processor = new MessageProcessorImpl();
-        String output = processor.processMessage(message, null);
+        String output = processor.processMessage(message, null, null);
         logger.debug("O/P=> " + output);
         return output;
     }
@@ -24,21 +25,31 @@ public class ChatServiceImpl implements ChatService {
     public String processRequest(HttpSession session, String message) {
         logger.info("processing request message - " + message);
 
-        if(message.startsWith("$debug"))
+        if(message.startsWith(AppConfigConstants.INSTRUCTION_DEBUG))
         {
-            String[] str = message.split("=");
-            logger.info("Received special instruction....");
-            String key = str[0];
-            String val = str[1];
-            logger.info("KEY=" + key + ", VAL=" + val);
-            session.setAttribute(key,val);
-            return "command set, please continue..";
+            return setSessionKey(session,message);
         }
-        String debugInstr = String.valueOf(session.getAttribute("$debug"));
+        if(message.startsWith(AppConfigConstants.INSTRUCTION_ACCOUNT))
+        {
+            logger.info(setSessionKey(session,message));
+        }
+        String debugInstr = String.valueOf(session.getAttribute(AppConfigConstants.INSTRUCTION_DEBUG));
+        String acct = (String) session.getAttribute(AppConfigConstants.INSTRUCTION_ACCOUNT);
 
         MessageProcessor processor = new MessageProcessorImpl();
-        String output = processor.processMessage(message,debugInstr);
+        String output = processor.processMessage(message,acct,debugInstr);
         logger.debug("O/P=> " + output);
         return output;
+    }
+
+    private String setSessionKey(HttpSession session, String msg)
+    {
+        logger.info("Received special instruction....");
+        String[] str = msg.split("=");
+        String key = str[0];
+        String val = str[1];
+        logger.info("KEY=" + key + ", VAL=" + val);
+        session.setAttribute(key,val);
+        return key + " set, please continue..";
     }
 }
