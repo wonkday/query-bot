@@ -1,7 +1,9 @@
 package com.rohitw.util;
 
+import com.rohitw.init.AppConfigConstants;
 import com.rohitw.model.RVo;
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -33,6 +35,11 @@ public class JdbcDataSourceUtil
     public static final String CONFIG_QUERY_ACCT_AND_KEYWORD = "SELECT a.account,a.application,a.db_uid,a.db_user,a.db_pass,a.db_url,b.alert,b.sql_txt,b.query_params,b.keyword,b.post_instr "
             + "FROM bot_db_config a INNER JOIN bot_query_config b on a.db_uid = b.db_uid "
             + "WHERE is_active='Y' AND account= :acct AND ( alert= :alertID or keyword= :alertID )";
+
+
+    public static final String CONFIG_QUERY_DISTINCT_ACCT = "SELECT distinct a.account FROM bot_db_config a";
+
+    private static CacheManager cacheManager = CacheManager.INSTANCE;
 
     /**
      * Database types
@@ -131,25 +138,48 @@ public class JdbcDataSourceUtil
             NamedParameterJdbcTemplate namedJdbcTmpl = new NamedParameterJdbcTemplate(jdbcTmpl);
             SqlRowSet rowSet = namedJdbcTmpl.queryForRowSet(query, paramSource);
 
-            int columnCount = rowSet.getMetaData().getColumnCount();
-            logger.debug("Column Count: " + columnCount);
-
-            while (rowSet.next()) {
-                RVo row = new RVo();
-                String colName, val;
-                for (int i = 1; i <= columnCount; i++)
-                {
-                    colName = rowSet.getMetaData().getColumnName(i);
-                    val = rowSet.getString(i);
-                    row.setFieldData(colName.toUpperCase(), val);
-                }
-                resultList.add(row);
-                count++;
+            if(rowSet == null || (rowSet != null && rowSet.wasNull())) {
+                return resultList.toArray(new RVo[count]);
             }
-        }catch(Exception ex)
-        {
-            logger.error("executeSelectQuery()", ex);
+            else {
+                int columnCount = rowSet.getMetaData().getColumnCount();
+                logger.debug("Column Count: " + columnCount);
+
+                while (rowSet.next()) {
+                    RVo row = new RVo();
+                    String colName, val;
+                    for (int i = 1; i <= columnCount; i++) {
+                        colName = rowSet.getMetaData().getColumnName(i);
+                        val = rowSet.getString(i);
+                        row.setFieldData(colName.toUpperCase(), val);
+                    }
+                    resultList.add(row);
+                    count++;
+                }
+            }
+        }
+        catch(DataAccessException ex) {
+            logger.error("executeSelectQuery() - DAE: ", ex);
+        }
+        catch(Exception ex) {
+            logger.error("executeSelectQuery() - E: ", ex);
         }
         return resultList.toArray(new RVo[count]);
+    }
+
+    public static DataSource getConfigDbDataSource()
+    {
+        DataSource configDbDS = (DataSource) cacheManager.getItemFromCache(AppConfigConstants.CACHE_ID_CONFIG_DS);
+        if(configDbDS == null)
+        {
+            logger.info("No DataSource found! creating config DS...");
+            configDbDS = JdbcDataSourceUtil.getDataSource();
+            cacheManager.addItemToCache(AppConfigConstants.CACHE_ID_CONFIG_DS,configDbDS);
+        }
+        else
+        {
+            logger.info("Using previously created config DS...");
+        }
+        return configDbDS;
     }
 }

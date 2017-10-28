@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -57,11 +58,11 @@ public class LinkController
     }
 
     @RequestMapping(value="/chat/{acct}", method= RequestMethod.GET)
-    public ModelAndView chatPageForAccount(HttpSession httpSession,@PathVariable String acct)
+    public ModelAndView chatPageForAccount(HttpServletRequest request,HttpSession httpSession,@PathVariable String acct)
     {
         if(httpSession != null)
         {
-            logger.info("SessionID: " + httpSession.getId() + " with Acct: " + acct);
+            logger.info("SessionID: <" + httpSession.getId() + "> with Acct: <" + acct + "> from User:" + request.getRemoteUser());
             httpSession.setAttribute(AppConfigConstants.INSTRUCTION_ACCOUNT,acct);
         }
         ModelAndView modelAndView = new ModelAndView("chat");
@@ -70,11 +71,11 @@ public class LinkController
     }
 
     @RequestMapping(value="/chat", method= RequestMethod.POST,produces= MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ChatData chatPage(@ModelAttribute("chatReq")String chatReq, HttpSession httpSession, BindingResult result)
+    public @ResponseBody ChatData chatPage(@ModelAttribute("chatReq")String chatReq, HttpServletRequest request, HttpSession httpSession, BindingResult result)
     {
         if(httpSession != null)
         {
-            logger.info("SessionID: " + httpSession.getId());
+            logger.info("SessionID: " + httpSession.getId() + " from User:" + request.getRemoteUser());
         }
 
         logger.info("request: " + chatReq);

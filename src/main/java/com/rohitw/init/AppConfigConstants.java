@@ -49,8 +49,18 @@ public class AppConfigConstants
     public static final String RESPONSE_TYPE_ERROR = "E";
 
     public static final String INSTRUCTION_DEBUG = "$debug";
+    public static final String INSTRUCTION_ACCOUNT = "$acct";
+
     public static final String IDENTIFIER_ALERT_ID = "alertID";
     public static final String IDENTIFIER_DUMMY = "dummy";
     public static final String IDENTIFIER_ACCOUNT = "acct";
-    public static final String INSTRUCTION_ACCOUNT = "$acct";
+    public static final String IDENTIFIER_RESET = "reset";
+
+
+    public static final String CACHE_ID_CONFIG_DS = "_configDB";
+    public static final String CACHE_ID_APP_DS_PREFIX = "_AppDB_";
+
+    public static final String METADATA_CACHE_ID_DS_KEY_TIME = "_time_";
+    public static final String METADATA_CACHE_ID_DS_KEY_COUNT = "_cnt_";
+
 }

@@ -15,7 +15,7 @@
         <param name="MaxFileSize" value="10MB" />
         <param name="MaxBackupIndex" value="5" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+            <param name="ConversionPattern" value="%d{ISO8601} %-5p (%t) [%c{2}(%M:%L)] %m%n"/>
         </layout>
     </appender>
 

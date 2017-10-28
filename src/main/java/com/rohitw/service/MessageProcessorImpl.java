@@ -20,13 +20,6 @@ import static com.rohitw.init.AppConfigConstants.*;
  */
 public class MessageProcessorImpl extends MessageProcessor
 {
-
-    private static final String CACHE_ID_CONFIG_DS = "_configDB";
-    private static final String CACHE_ID_APP_DS_PREFIX = "_AppDB_";
-
-    private static final String METADATA_CACHE_ID_DS_KEY_TIME = "_time_";
-    private static final String METADATA_CACHE_ID_DS_KEY_COUNT = "_cnt_";
-
     private Logger logger = Logger.getLogger(MessageProcessorImpl.class);
     private CacheManager cacheManager = CacheManager.INSTANCE;
     private UserPropertySingleton propertySingleton = UserPropertySingleton.getInstance();
@@ -40,6 +33,10 @@ public class MessageProcessorImpl extends MessageProcessor
             logger.info("processing dummy message");
             response = dummyResponse(inputMsg);
         }
+        if(instr != null && instr.equals(AppConfigConstants.IDENTIFIER_RESET)) {
+            logger.info("resetting metadata cache");
+            cacheManager.clearMetadataCache();
+        }
         else
         {
             response = new HashMap<>();
@@ -52,17 +49,7 @@ public class MessageProcessorImpl extends MessageProcessor
                 configQuery = JdbcDataSourceUtil.CONFIG_QUERY_ACCT;
             }
 
-            DataSource configDbDS = (DataSource) cacheManager.getItemFromCache(CACHE_ID_CONFIG_DS);
-            if(configDbDS == null)
-            {
-                logger.info("No DataSource found! creating config DS...");
-                configDbDS = JdbcDataSourceUtil.getDataSource();
-                cacheManager.addItemToCache(CACHE_ID_CONFIG_DS,configDbDS);
-            }
-            else
-            {
-                logger.info("Using previously created config DS...");
-            }
+            DataSource configDbDS = JdbcDataSourceUtil.getConfigDbDataSource();
 
             RVo[] configVoArr = JdbcDataSourceUtil.executeSelectQuery(configDbDS, configQuery, paramSource);
             if(configVoArr != null && configVoArr.length == 1)
@@ -101,7 +88,7 @@ public class MessageProcessorImpl extends MessageProcessor
                 stringBuilder.append(">, currentTime=<");
                 stringBuilder.append(currentTime);
                 stringBuilder.append(">");
-
+                logger.info("QueryConfig: "+stringBuilder.toString());
                 logger.info("Found unique record for AlertID: " + inputMsg);
 
                 if(queryExecCount!= null && queryExecCount > maxQueryExecCnt && currentTime < (lastQueriedTime + maxQueryIntervalMillis))

@@ -1,10 +1,8 @@
 package com.rohitw.init;
 
 import java.util.List;
-import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
 
 import com.rohitw.util.JdbcDataSourceUtil;
 import com.rohitw.util.UserPropertySingleton;

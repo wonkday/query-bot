@@ -84,4 +84,10 @@ public enum CacheManager
     {
         metadataCache.put(key,value);
     }
+
+    public void clearMetadataCache(){
+        synchronized (metadataCache){
+            metadataCache.clear();
+        }
+    }
 }

@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -22,6 +23,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
 		servlet.addMapping("/");
 		servlet.setLoadOnStartup(1);
+
+		//rest service
+		Dynamic restServlet = servletContext.addServlet("jersey-servlet",new ServletContainer());
+		restServlet.addMapping("/rest/*");
+		restServlet.setInitParameter("jersey.config.server.provider.packages","com.rohitw.rest");
+		restServlet.setLoadOnStartup(1);
 	}
 
 }

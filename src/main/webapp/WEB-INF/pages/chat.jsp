@@ -6,17 +6,37 @@
     <head>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/bootstrap/3.3.2-2/js/bootstrap.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/style.css">
     <link rel='stylesheet' href='${pageContext.request.contextPath}/webjars/bootstrap/3.3.2-2/css/bootstrap.min.css'>
     <script>
+        // If IE > 8, then revert to newer jquery
+        if (document.all && document.addEventListener) {
+            // Restore globally scoped jQuery variables to the first version loaded(the newer version)
+            jq_1_12_4 = jQuery.noConflict( true );
+            alert("IE > 8 = " + jq_1_12_4);
+        }
+
         /*jQuery(document).ready(function($)
         {
             $("#header").load("${pageContext.request.contextPath}/static/css/header.jsp");
             $("#footer").load("${pageContext.request.contextPath}/static/css/footer.html");
         });*/
+
+        var thisUserAccount ;
+        $(document).ready(function() {
+            //needs permission in IE security settings --> Local intranet --> Custom level --> Initialize and script Activex controls not marked as safe for scripting
+            //var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+            if(navigator.userAgent.indexOf('MSIE')!==-1 || navigator.appVersion.indexOf('Trident/') > 0)
+            { //checks for IE6 to IE11
+                var WinNetwork = new ActiveXObject("WScript.Network");
+                thisUserAccount = WinNetwork.UserName;
+                alert(thisUserAccount);
+            }
+        } );
 
         Number.prototype.padLeft = function(base,chr){
            var  len = (String(base || 10).length - String(this).length)+1;
@@ -67,12 +87,21 @@
                 $.ajax({
                         url: '${pageContext.request.contextPath}/chat',
                         type: 'POST',
-                        data: {'chatReq':inputData}, // An object with the key 'chatReq' and value 'inputData';
+                        data: {'chatReq':inputData}, // An object with the key 'chatReq' and value 'inputData'
+                        timeout: 40000,              //timeout 40 sec
                         success: function (result) {
                           //alert("response here...." + result);
                           //console.log(JSON.stringify(result));
                           addMessageToChatSession(result.chatResp,"_r");
                           $("#instrMsg").val("");
+                        },
+                        error: function(xmlhttprequest, textstatus, message) {
+                            console.log(JSON.stringify("ERROR:--> " + textstatus+":"+message));
+                            if(textstatus==="timeout") {
+                                addMessageToChatSession("Request timed out.. Please retry.","_r");
+                            } else {
+                                addMessageToChatSession("Error: " + textstatus,"_r");
+                            }
                         }
                     });
             }
@@ -114,8 +143,13 @@
 			//auto-scroll to bottom after data is added
 			var elem = document.getElementById('message'+millis);
 			var footer = document.getElementById('panel-footer');
-			//elem.scrollTop = elem.scrollTop + elem.scrollHeight + footer.scrollHeight;
-			document.scrollingElement.scrollTop = document.scrollingElement.scrollTop + elem.scrollHeight + footer.scrollHeight;
+
+			var isChrome = window.chrome != null && window.navigator.vendor === "Google Inc.";
+            if(isChrome)
+            {
+            	//elem.scrollTop = elem.scrollTop + elem.scrollHeight + footer.scrollHeight;
+            	document.scrollingElement.scrollTop = document.scrollingElement.scrollTop + elem.scrollHeight + footer.scrollHeight;
+            }
         }
 
 
